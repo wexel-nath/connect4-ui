@@ -1,0 +1,21 @@
+body {
+    text-align: center;
+}
+
+#connect4 {
+    background-color: darkblue;
+    display: inline-block;
+}
+
+.col {
+    width: 70px;
+    height: 70px;
+    display: inline-block;
+    background-color: white;
+    border-radius: 50%;
+    margin: 5px;
+}
+
+.next-red {
+    background-color: rgb(60, 0, 0);
+}
