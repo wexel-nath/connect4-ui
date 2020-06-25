@@ -1,21 +1,40 @@
 <html>
-
-<head>
+  <head>
     <title>Connect 4</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="util.js"></script>
     <script src="player.js"></script>
     <script src="connect4.js"></script>
+    <script src="manager.js"></script>
     <script src="main.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1 id="heading">Waiting for red</h1>
     <div id="connect4"></div>
     <br />
     <button id="restart">Restart</button>
-</body>
 
+    <div id="red-select" style="text-align: left;">
+      <h4>Choose Red Player</h4>
+      <div>
+        <input checked type="radio" name="red-type" value="human" />Human
+      </div>
+      <div><input type="radio" name="red-type" value="random" />Random</div>
+      <!-- <div><input type="radio" name="red-type" value="custom" />Custom</div>
+      <div><input hidden type="text" name="red-custom" /></div> -->
+    </div>
+
+    <div id="yellow-select" style="text-align: left;">
+      <h4>Choose Yellow Player</h4>
+      <div>
+        <input checked type="radio" name="yellow-type" value="human" />Human
+      </div>
+      <div><input type="radio" name="yellow-type" value="random" />Random</div>
+      <!-- <div><input type="radio" name="yellow-type" value="custom" />Custom</div>
+      <div><input hidden type="text" name="yellow-custom" /></div> -->
+    </div>
+  </body>
 </html>

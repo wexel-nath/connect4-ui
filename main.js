@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    manager = new Manager("#connect4");
-    manager.run();
+  manager = new Manager();
+  manager.run();
 
-    $('#restart').click(() => {
-        manager.run();
-    })
+  $("#restart").click(() => {
+    manager.run();
+  });
 });

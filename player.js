@@ -1,58 +1,82 @@
 class HumanPlayer {
-    constructor(color, selector) {
-        this.turn = false;
-        this.color = color;
-        this.selectedColumn = -1;
-        this.selector = selector;
-        this.setupEventListeners();
+  constructor(color, selector) {
+    this.turn = false;
+    this.color = color;
+    this.selectedColumn = -1;
+    this.selector = selector;
+    this.setupEventListeners();
+  }
+
+  async getPosition(validMoves, boardArray) {
+    this.turn = true;
+    while (this.selectedColumn < 0) {
+      await timeout(50);
     }
 
-    async getPosition() {
-        this.turn = true;
-        while (this.selectedColumn < 0) {
-            await timeout(50);
+    const col = this.selectedColumn;
+    this.selectedColumn = -1;
+    this.turn = false;
+    return col;
+  }
+
+  setupEventListeners() {
+    const board = $(this.selector);
+    const self = this;
+
+    const findLastEmptyCell = (col) => {
+      const cells = $(`.col[data-col='${col}']`);
+      for (let i = cells.length - 1; i >= 0; i--) {
+        const cell = $(cells[i]);
+        if (cell.hasClass("empty")) {
+          return cell;
         }
+      }
+      return null;
+    };
 
-        const col = this.selectedColumn;
-        this.selectedColumn = -1;
-        this.turn = false;
-        return col;
-    }
+    board.on("mouseenter", ".col.empty", function () {
+      if (!self.turn) return;
 
-    setupEventListeners() {
-        const board = $(this.selector);
-        const self = this;
+      const col = $(this).data("col");
+      const lastEmptyCell = findLastEmptyCell(col);
+      lastEmptyCell.addClass(`next-${self.color}`);
+    });
 
-        const findLastEmptyCell = col => {
-            const cells = $(`.col[data-col='${col}']`);
-            for (let i = cells.length - 1; i >= 0; i--) {
-                const cell = $(cells[i]);
-                if (cell.hasClass("empty")) {
-                    return cell;
-                }
-            }
-            return null;
-        }
+    board.on("mouseleave", ".col", function () {
+      if (!self.turn) return;
 
-        board.on("mouseenter", ".col.empty", function () {
-            if (!self.turn) return;
+      $(".col").removeClass(`next-${self.color}`);
+    });
 
-            const col = $(this).data("col");
-            const lastEmptyCell = findLastEmptyCell(col);
-            lastEmptyCell.addClass(`next-${self.color}`);
-        });
+    board.on("click", ".col.empty", function () {
+      if (!self.turn) return;
 
-        board.on("mouseleave", ".col", function () {
-            if (!self.turn) return;
+      self.selectedColumn = $(this).data("col");
+      $(this).trigger("mouseenter");
+    });
+  }
+}
 
-            $(".col").removeClass(`next-${self.color}`);
-        });
+class RandomPlayer {
+  constructor(color) {
+    this.color = color;
+  }
 
-        board.on("click", ".col.empty", function () {
-            if (!self.turn) return;
+  async getPosition(validMoves, boardArray) {
+    await timeout(100);
+    const index = Math.floor(Math.random() * validMoves.length);
+    return validMoves[index];
+  }
+}
 
-            self.selectedColumn = $(this).data("col");
-            $(this).trigger("mouseenter");
-        });
-    }
+class CustomPlayer {
+  constructor(color, endpoint) {
+    this.color = color;
+    this.endpoint = endpoint;
+  }
+
+  async getPosition(validMoves, boardArray) {
+    // todo
+    return 0;
+  }
 }
