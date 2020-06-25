@@ -16,6 +16,22 @@ body {
     margin: 5px;
 }
 
+.col.empty {
+    cursor: pointer;
+}
+
 .next-red {
-    background-color: rgb(60, 0, 0);
+    background-color: rgba(255, 0, 0, 0.6);
+}
+
+.red {
+    background-color: rgba(255, 0, 0);
+}
+
+.next-yellow {
+    background-color: rgb(255, 255, 0, 0.6);
+}
+
+.yellow {
+    background-color: rgb(255, 255, 0);
 }
