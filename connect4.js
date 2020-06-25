@@ -1,23 +1,51 @@
 const PLAYER_ONE = "red";
 const PLAYER_TWO = "yellow";
 
+class Manager {
+    constructor(selector) {
+        this.board = new Connect4(selector);
+
+        this.playerOne = new HumanPlayer(PLAYER_ONE, selector)
+        this.playerTwo = new HumanPlayer(PLAYER_TWO, selector)
+    }
+
+    heading(text) {
+        $('#heading').text(text);
+    }
+
+    async run() {
+        this.board.createGrid();
+
+        let turns = 0;
+        while (true) {
+            turns++;
+            const player = turns % 2 === 0 ? this.playerTwo : this.playerOne;
+
+            this.heading(`Waiting for ${player.color}`);
+            const col = await player.getPosition();
+            const winner = this.board.dropPiece(player.color, col);
+            if (winner) {
+                this.heading(`Game Over! Player ${player.color} has won!`);
+                break;
+            } else if (turns === 42) {
+                this.heading("Game Over! It's a draw!");
+                break;
+            }
+        }
+
+        $('.col.empty').removeClass('empty');
+    }
+}
+
 class Connect4 {
     constructor(selector) {
         this.ROWS = 6;
         this.COLS = 7;
-        this.player = "red";
         this.selector = selector;
-        this.isGameOver = false;
-        this.onPlayerMove = () => {};
         this.createGrid();
-        this.setupEventListeners();
     }
 
     createGrid() {
-        this.player = "red";
-        this.onPlayerMove();
-        this.isGameOver = false;
-
         const board = $(this.selector);
         board.empty();
         for (let numRow = 0; numRow < this.ROWS; numRow++) {
@@ -33,62 +61,19 @@ class Connect4 {
         }
     }
 
-    setupEventListeners() {
-        const board = $(this.selector);
-        const that = this;
+    dropPiece(color, col) {
+        const lastEmptyCell = findLastEmptyCell(col);
+        const row = lastEmptyCell.data("row");
 
-        const findLastEmptyCell = col => {
-            const cells = $(`.col[data-col='${col}']`);
-            for (let i = cells.length - 1; i >= 0; i--) {
-                const cell = $(cells[i]);
-                if (cell.hasClass("empty")) {
-                    return cell;
-                }
-            }
-            return null;
-        }
+        lastEmptyCell.removeClass(`empty next-${color}`);
+        lastEmptyCell.addClass(color);
+        lastEmptyCell.data('color', color);
 
-        board.on("mouseenter", ".col.empty", function () {
-            if (that.isGameOver) return;
-
-            const col = $(this).data("col");
-            const lastEmptyCell = findLastEmptyCell(col);
-            lastEmptyCell.addClass(`next-${that.player}`);
-        });
-
-        board.on("mouseleave", ".col", function () {
-            if (that.isGameOver) return;
-
-            $(".col").removeClass(`next-${that.player}`);
-        });
-
-        board.on("click", ".col.empty", function () {
-            if (that.isGameOver) return;
-
-            const col = $(this).data("col");
-            const lastEmptyCell = findLastEmptyCell(col);
-            const row = lastEmptyCell.data("row");
-
-            lastEmptyCell.removeClass(`empty next-${that.player}`);
-            lastEmptyCell.addClass(that.player);
-            lastEmptyCell.data('player', that.player);
-
-            const winner = that.checkForWinner(row, col);
-            if (winner) {
-                that.isGameOver = true;
-                alert(`Game Over! Player ${that.player} has won!`);
-                $('.col.empty').removeClass('empty');
-                return;
-            }
-
-            that.player = that.player === PLAYER_ONE ? PLAYER_TWO : PLAYER_ONE;
-            that.onPlayerMove();
-            $(this).trigger("mouseenter");
-        });
+        return this.checkForWinner(color, row, col);
     }
 
-    checkForWinner(row, col) {
-        const that = this;
+    checkForWinner(color, row, col) {
+        const self = this;
 
         const getCell = (i, j) => $(`.col[data-row='${i}'][data-col='${j}']`);
 
@@ -98,10 +83,10 @@ class Connect4 {
             let j = col + colDiff;
             let next = getCell(i, j);
             while (i >= 0 &&
-                i < that.ROWS &&
+                i < self.ROWS &&
                 j >= 0 &&
-                j < that.COLS &&
-                next.data('player') === that.player
+                j < self.COLS &&
+                next.data('color') === color
             ) {
                 total++;
                 i += rowDiff;
@@ -115,7 +100,7 @@ class Connect4 {
             const total = 1 +
                 checkDirection(rowDiff, colDiff) +
                 checkDirection(-rowDiff, -colDiff);
-            return total >= 4 ? that.player : null;
+            return total >= 4;
         }
 
         return (
@@ -124,9 +109,5 @@ class Connect4 {
             checkWin(1, 1) || // positive diagonal
             checkWin(-1, 1) // negative diagonal
         );
-    }
-
-    restart() {
-        this.createGrid();
     }
 }

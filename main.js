@@ -1,10 +1,8 @@
 $(document).ready(function () {
-    const connect4 = new Connect4('#connect4');
-    connect4.onPlayerMove = () => {
-        $('#player').text(connect4.player);
-    }
+    manager = new Manager("#connect4");
+    manager.run();
 
     $('#restart').click(() => {
-        connect4.restart();
+        manager.run();
     })
 });
