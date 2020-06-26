@@ -29,8 +29,23 @@ class Connect4 {
   }
 
   getBoardArray() {
-    // todo
-    return [];
+    let board = [];
+    for (let numRow = 0; numRow < this.ROWS; numRow++) {
+      board[numRow] = [];
+      for (let numCol = 0; numCol < this.COLS; numCol++) {
+        const color = $(`.col[data-row='${numRow}'][data-col='${numCol}']`).data("color");
+        let val = 0;
+        if (color === PLAYER_ONE) {
+          val = 1;
+        } else if (color === PLAYER_TWO) {
+          val = 2;
+        }
+
+        board[numRow].push(val)
+      }
+    }
+
+    return board;
   }
 
   dropPiece(color, col) {
