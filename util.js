@@ -10,3 +10,8 @@ const findLastEmptyCell = col => {
 }
 
 const timeout = async ms => new Promise(res => setTimeout(res, ms));
+
+const randomMove = validMoves => {
+    const index = Math.floor(Math.random() * validMoves.length);
+    return validMoves[index];
+}

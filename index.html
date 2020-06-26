@@ -1,40 +1,115 @@
-<html>
-  <head>
-    <title>Connect 4</title>
+<!DOCTYPE html PUBLIC"-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="util.js"></script>
-    <script src="player.js"></script>
-    <script src="connect4.js"></script>
-    <script src="manager.js"></script>
-    <script src="main.js"></script>
-  </head>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Connect 4</title>
 
-  <body>
-    <h1 id="heading">Waiting for red</h1>
-    <div id="connect4"></div>
-    <br />
-    <button id="restart">Restart</button>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="util.js"></script>
+  <script src="player.js"></script>
+  <script src="connect4.js"></script>
+  <script src="manager.js"></script>
+  <script src="main.js"></script>
+</head>
 
-    <div id="red-select" style="text-align: left;">
-      <h4>Choose Red Player</h4>
-      <div>
-        <input checked type="radio" name="red-type" value="human" />Human
+<body>
+  <div class="row">
+    <div class="column left">
+      <div class="left-inner">
+        <h3>Red Player</h3>
+        <div id="red-select">
+          <input type="radio" name="red-type" value="human" onclick="hideCustom('red')" />Human
+          <input type="radio" name="red-type" value="random" onclick="hideCustom('red')" />Random
+          <input type="radio" name="red-type" value="custom" onclick="showCustom('red')" />Custom
+          <div><input type="text" id="red-custom" style="display: none;" placeholder="https://www.example.com" /></div>
+        </div>
+        <div>
+          <h4>Stats</h4>
+          <table>
+            <tr>
+              <th>Played</th>
+              <td id="red-played">0</td>
+            </tr>
+            <tr>
+              <th>Wins</th>
+              <td id="red-wins">0</td>
+            </tr>
+            <tr>
+              <th>Win Rate</th>
+              <td id="red-win-rate">0%</td>
+            </tr>
+            <tr>
+              <th>Losses</th>
+              <td id="red-losses">0</td>
+            </tr>
+            <tr>
+              <th>Draws</th>
+              <td id="red-draws">0</td>
+            </tr>
+            <tr>
+              <th>Avg Time</th>
+              <td id="red-avg-time">0ms</td>
+            </tr>
+            <tr>
+              <th>Max Time</th>
+              <td id="red-max-time">0ms</td>
+            </tr>
+          </table>
+        </div>
       </div>
-      <div><input type="radio" name="red-type" value="random" />Random</div>
-      <!-- <div><input type="radio" name="red-type" value="custom" />Custom</div>
-      <div><input hidden type="text" name="red-custom" /></div> -->
     </div>
-
-    <div id="yellow-select" style="text-align: left;">
-      <h4>Choose Yellow Player</h4>
-      <div>
-        <input checked type="radio" name="yellow-type" value="human" />Human
+    <div class="column middle">
+      <h1 id="heading">Waiting for red</h1>
+      <div id="connect4"></div>
+      <br />
+      <button id="restart">Restart</button>
+    </div>
+    <div class="column right" style="float: left; text-align: left;">
+      <h3>Yellow Player</h3>
+      <div id="yellow-select">
+        <input type="radio" name="yellow-type" value="human" onclick="hideCustom('yellow')" />Human
+        <input type="radio" name="yellow-type" value="random" onclick="hideCustom('yellow')" />Random
+        <input type="radio" name="yellow-type" value="custom" onclick="showCustom('yellow')" />Custom
+        <div><input type="text" id="yellow-custom" style="display: none;" placeholder="https://www.example.com" /></div>
       </div>
-      <div><input type="radio" name="yellow-type" value="random" />Random</div>
-      <!-- <div><input type="radio" name="yellow-type" value="custom" />Custom</div>
-      <div><input hidden type="text" name="yellow-custom" /></div> -->
+      <div>
+        <h4>Stats</h4>
+        <table>
+          <tr>
+            <th>Played</th>
+            <td id="yellow-played">0</td>
+          </tr>
+          <tr>
+            <th>Wins</th>
+            <td id="yellow-wins">0</td>
+          </tr>
+          <tr>
+            <th>Win Rate</th>
+            <td id="yellow-win-rate">0%</td>
+          </tr>
+          <tr>
+            <th>Losses</th>
+            <td id="yellow-losses">0</td>
+          </tr>
+          <tr>
+            <th>Draws</th>
+            <td id="yellow-draws">0</td>
+          </tr>
+          <tr>
+            <th>Avg Time</th>
+            <td id="yellow-avg-time">0ms</td>
+          </tr>
+          <tr>
+            <th>Max Time</th>
+            <td id="yellow-max-time">0ms</td>
+          </tr>
+        </table>
+      </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>

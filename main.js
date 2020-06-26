@@ -6,3 +6,11 @@ $(document).ready(function () {
     manager.run();
   });
 });
+
+const showCustom = color => {
+  document.getElementById(`${color}-custom`).style.display = 'block';
+};
+
+const hideCustom = color => {
+  document.getElementById(`${color}-custom`).style.display = 'none';
+};

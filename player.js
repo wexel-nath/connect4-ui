@@ -4,6 +4,7 @@ class HumanPlayer {
     this.color = color;
     this.selectedColumn = -1;
     this.selector = selector;
+    this.isAutomated = false;
     this.setupEventListeners();
   }
 
@@ -58,25 +59,38 @@ class HumanPlayer {
 }
 
 class RandomPlayer {
-  constructor(color) {
+  constructor(color, waitTime) {
     this.color = color;
+    this.waitTime = waitTime;
+    this.isAutomated = true;
   }
 
   async getPosition(validMoves, boardArray) {
-    await timeout(100);
-    const index = Math.floor(Math.random() * validMoves.length);
-    return validMoves[index];
+    await timeout(this.waitTime);
+    return randomMove(validMoves);
   }
 }
 
 class CustomPlayer {
   constructor(color, endpoint) {
     this.color = color;
+    this.isAutomated = true;
     this.endpoint = endpoint;
   }
 
   async getPosition(validMoves, boardArray) {
-    // todo
-    return 0;
+    const data = {
+      board: boardArray
+    };
+
+    const result = await axios.post(this.endpoint, data)
+      .then(response => {
+        return response.data;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+    return result.move || validMoves[0];
   }
 }

@@ -70,11 +70,11 @@ class Connect4 {
     };
 
     const checkWin = (rowDiff, colDiff) => {
-      const total =
-        1 +
-        checkDirection(rowDiff, colDiff) +
-        checkDirection(-rowDiff, -colDiff);
-      return total >= 4;
+      if (checkDirection(rowDiff, colDiff) + checkDirection(-rowDiff, -colDiff) >= 3) {
+        $(".col.empty").removeClass("empty");
+        return true;
+      };
+      return false;
     };
 
     return (

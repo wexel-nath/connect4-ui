@@ -2,6 +2,29 @@ body {
     text-align: center;
 }
 
+.column {
+    float: left;
+}
+
+.left {
+    width: 25%;
+}
+
+.left-inner {
+    float: right;
+    text-align: left;
+}
+
+.right {
+    width: 25%;
+    float: left;
+    text-align: left;
+}
+
+.middle {
+    width: 50%;
+}
+
 #connect4 {
     background-color: darkblue;
     display: inline-block;
